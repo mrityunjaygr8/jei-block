@@ -43,10 +43,16 @@ func (bc *Blockchain) AddBlock(data string) {
 			log.Panic(err)
 		}
 		err = b.Put([]byte("l"), newBlock.Hash)
+		if err != nil {
+			log.Panic(err)
+		}
 		bc.tip = newBlock.Hash
 
 		return nil
 	})
+	if err != nil {
+		log.Panic(err)
+	}
 
 }
 
@@ -68,7 +74,13 @@ func NewBlockchain() *Blockchain {
 				log.Panic(err)
 			}
 			err = b.Put(genesis.Hash, genesis.Serialize())
+			if err != nil {
+				log.Panic(err)
+			}
 			err = b.Put([]byte("l"), genesis.Hash)
+			if err != nil {
+				log.Panic(err)
+			}
 			tip = genesis.Hash
 		} else {
 			tip = b.Get([]byte("l"))
@@ -76,6 +88,9 @@ func NewBlockchain() *Blockchain {
 
 		return nil
 	})
+	if err != nil {
+		log.Panic(err)
+	}
 
 	bc := Blockchain{tip, db}
 	return &bc
